@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../dbConnection.js";
 
+
 export const tripModel = sequelize.define(
   "trip",
   {
@@ -64,3 +65,4 @@ export const tripModel = sequelize.define(
     },
   }
 );
+

@@ -3,15 +3,14 @@ import axios from "axios";
 import crypto from "crypto";
 import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 import { bookingModel } from "../../../DB/models/booking.model.js";
-import { tripModel } from "../../../DB/models/trip.model.js";
+import { tripModel } from "../../../DB/models/assoiation.js";
 import { catchError } from "../../middleware/catchError.js";
 import { apiError } from "../../utils/apiError.js";
 import { availability } from "../../../DB/models/availability.model.js";
 import { sendEmailOrderConfirm } from "../../email/sendEmail.js";
-
 
 const createBooking = catchError(async (req, res, next) => {
   let { Adults, children, date } = req.body;
@@ -23,17 +22,17 @@ const createBooking = catchError(async (req, res, next) => {
   booking.trip = req.params.id;
   booking.totalPrice = trip.priceAfterDis * (Adults + children);
   await booking.save();
-  let available = await availability.findOne({ where: { date }});
-  if(!available){
+  let available = await availability.findOne({ where: { date } });
+  if (!available) {
     let newAvail = new availability();
     newAvail.date = date;
     newAvail.booked = newAvail + Adults + children;
     await newAvail.save();
-  }else{
+  } else {
     available.booked = available.booked + Adults + children;
     await available.save();
-  };
-  
+  }
+
   let token = JWT.sign(
     { bookingId: booking.id, tripId: trip.id },
     "discovery_sharm"
@@ -186,15 +185,15 @@ const createOnlineOrder = async (req, res) => {
     const sortedQueryParams = sortedQueryKeys
       .map((key) => `${relevantData[key]}`)
       .join("");
-   
+
     console.log(sortedQueryParams);
     const calculatedHmac = crypto
       .createHmac("sha512", PAYMOB_HMAC)
       .update(sortedQueryParams)
       .digest("hex");
 
-      console.log(calculatedHmac);
-      console.log(receivedHmac);
+    console.log(calculatedHmac);
+    console.log(receivedHmac);
     if (calculatedHmac !== receivedHmac) {
       return res.status(400).send("Webhook signature verification failed");
     }

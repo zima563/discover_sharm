@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../dbConnection.js";
-import { tripModel } from "./trip.model.js";
 
 export const reviewModel = sequelize.define("review", {
   id: {
@@ -31,11 +30,12 @@ export const reviewModel = sequelize.define("review", {
       isEmail: { msg: "invalid email" },
     },
   },
-  trip: {
+  tripId: {
     type: DataTypes.INTEGER,
     references: {
-      model: tripModel,
+      model: "trips",
       key: "id",
     },
   },
 });
+

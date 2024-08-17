@@ -1,4 +1,5 @@
-import { tripModel } from "../../../DB/models/trip.model.js";
+import { reviewModel } from "../../../DB/models/assoiation.js";
+import { tripModel } from "../../../DB/models/assoiation.js";
 import { catchError } from "../../middleware/catchError.js";
 import { apiError } from "../../utils/apiError.js";
 
@@ -13,7 +14,10 @@ const getTrips = catchError(async (req, res, next) => {
 });
 
 const getTrip = catchError(async (req, res, next) => {
-  let trip = await tripModel.findByPk(req.params.id);
+  let trip = await tripModel.findOne({
+    where: {id: req.params.id},
+    include: [{ model: reviewModel , as: "myReviews"}]
+  });
   !trip && next(new apiError("not trip found", 404));
   trip && res.json({ msg: "success", trip });
 });

@@ -48,7 +48,7 @@ export const bookingModel = sequelize.define(
         min: { args: [0], msg: "Must be at least 1" },
       },
     },
-    trip: {
+    tripId: {
       type: DataTypes.INTEGER,
       references: {
         model: tripModel,
@@ -84,7 +84,7 @@ export const bookingModel = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
       allowNull: false,
-    }
+    },
   },
   {
     timestamps: true,

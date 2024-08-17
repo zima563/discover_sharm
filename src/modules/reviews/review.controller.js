@@ -1,5 +1,5 @@
-import { reviewModel } from "../../../DB/models/review.model.js";
-import { tripModel } from "../../../DB/models/trip.model.js";
+import { reviewModel } from "../../../DB/models/assoiation.js";
+import { tripModel } from "../../../DB/models/assoiation.js";
 import { catchError } from "../../middleware/catchError.js";
 import { apiError } from "../../utils/apiError.js";
 
@@ -8,12 +8,11 @@ const addReview = catchError(async (req, res, next) => {
   !trip && next(new apiError("not trip found", 404));
 
   let review = new reviewModel(req.body);
-  review.trip = req.params.id;
+  review.tripId = req.params.id;
   await review.save();
 
   let ratingQuantity = trip.ratingQuantity + 1;
-
-  let ratingAverage = (trip.ratingAverage + review.rate) / ratingQuantity;
+  let ratingAverage = ((trip.ratingAverage * trip.ratingQuantity) + review.rate) / ratingQuantity;
 
   await tripModel.update(
     { ratingAverage, ratingQuantity },
