@@ -10,9 +10,10 @@ const app = express();
 // ✅ تفعيل CORS
 app.use(
   cors({
-    origin: ["https://discoversharm.com"], // اسم الدومين اللي مسموحله
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // لو بتستخدم cookies أو headers خاصة
+    origin: ["https://discoversharm.com", "http://localhost:5173"], // ضيف الدومين الحقيقي
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
