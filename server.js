@@ -1,18 +1,33 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import { sequelize } from "./DB/dbConnection.js";
 import { bootstrap } from "./src/index.routes.js";
 
 dotenv.config();
 const app = express();
 
-sequelize.sync();
+// ✅ تفعيل CORS
+app.use(
+  cors({
+    origin: ["https://discoversharm.com"], // اسم الدومين اللي مسموحله
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // لو بتستخدم cookies أو headers خاصة
+  })
+);
 
 app.use(express.json());
 
+// ✅ تفعيل الاتصال بقاعدة البيانات
+sequelize
+  .sync()
+  .then(() => console.log("✅ Database connected & synced"))
+  .catch((err) => console.error("❌ Database error:", err));
+
+// ✅ routes
 bootstrap(app);
 
-
-app.listen(process.env.PORT, () =>
-  console.log(`Example app listening on port ${3000}!`)
+// ✅ تشغيل السيرفر
+app.listen(process.env.PORT || 3000, () =>
+  console.log(`🚀 Server running on port ${process.env.PORT || 3000}`)
 );
