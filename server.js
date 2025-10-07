@@ -21,6 +21,7 @@ sequelize
 bootstrap(app);
 
 // ✅ تشغيل السيرفر
-app.listen(process.env.PORT || 3000, () =>
-  console.log(`🚀 Server running on port ${process.env.PORT || 3000}`)
-);
+const port = process.env.PORT || 3000;
+app.listen(port, "127.0.0.1", () => {
+  console.log(`🚀 Server running on port ${port}`);
+});
